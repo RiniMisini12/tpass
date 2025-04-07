@@ -54,7 +54,7 @@ func ConstructMasterPassword(cfg config.SecurityConfig) (string, error) {
 }
 
 func GetMasterPassword() string {
-	cfg, err := config.LoadConfig("config.toml")
+	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Fatalf("Error loading config: %v", err)
 	}

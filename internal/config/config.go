@@ -1,12 +1,15 @@
 package config
 
 import (
+	_ "embed"
 	"fmt"
-	"os"
 	"os/user"
 
 	"github.com/pelletier/go-toml/v2"
 )
+
+//go:embed config.toml
+var configFileData []byte
 
 type Config struct {
 	Security SecurityConfig `toml:"security"`
@@ -19,13 +22,9 @@ type SecurityConfig struct {
 	MainPassword string `toml:"password"`
 }
 
-func LoadConfig(path string) (Config, error) {
+func LoadConfig() (Config, error) {
 	var cfg Config
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return cfg, fmt.Errorf("failed to read config file: %w", err)
-	}
-	if err := toml.Unmarshal(data, &cfg); err != nil {
+	if err := toml.Unmarshal(configFileData, &cfg); err != nil {
 		return cfg, fmt.Errorf("failed to unmarshal config: %w", err)
 	}
 	return cfg, nil
